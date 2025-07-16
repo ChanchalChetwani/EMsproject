@@ -1,0 +1,50 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, #2c3e50, #34495e);
+  color: #fff;
+  font-size: 2rem;
+  font-weight: bold;
+  height: 100%;
+  width: 100%;
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  text-align: center;
+  padding: 2rem;
+  box-sizing: border-box;
+
+  // 🧠 Prevent overflow issues on smaller screens
+  overflow: hidden;
+
+  // 💡 Optional: Add subtle animation for smooth load
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+// ✅ Responsive tweaks
+@media (max-width: 992px) {
+  :host {
+    border-radius: 0;
+    font-size: 1.6rem;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  :host {
+    font-size: 1.3rem;
+    padding: 1rem;
+  }
+}
+
+// ✨ Optional animation
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,218 @@
+<div class="dashboard-container">
+  <app-sidebar></app-sidebar>
+
+  <div class="main-content">
+    <app-topbar></app-topbar>
+
+    <div class="employee-wrapper">
+      <!-- 🔹 Header Row -->
+      <div class="header-row">
+        <h3>Employee Management</h3>
+        <button *ngIf="currentUser.role === 'Admin' || currentUser.role === 'HR'" (click)="toggleAddForm()">
+          {{ showAddForm ? 'Close' : 'Add Employee' }}
+        </button>
+      </div>
+
+      <!-- 🔹 Add Employee Form -->
+<div *ngIf="showAddForm" class="add-employee-form">
+  <form #employeeForm="ngForm" (ngSubmit)="addEmployee()" novalidate>
+    <div class="form-grid">
+      <input
+        type="text"
+        name="name"
+        placeholder="Full Name"
+        [(ngModel)]="newEmployee.name"
+        required
+      />
+
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        [(ngModel)]="newEmployee.email"
+        required
+      />
+
+      <!-- Phone with Country Code -->
+      <div class="phone-field" style="display: flex; gap: 0.5rem;">
+        <select
+          name="countryCode"
+          [(ngModel)]="selectedCountryCode"
+          required
+        >
+          <option value="+91">🇮🇳 +91</option>
+          <option value="+1">🇺🇸 +1</option>
+          <option value="+44">🇬🇧 +44</option>
+        </select>
+
+        <input
+          type="text"
+          name="contact"
+          placeholder="Contact Number"
+          [(ngModel)]="newEmployee.contact"
+          required
+          pattern="[0-9]{10}"
+          title="Enter 10 digit number"
+        />
+      </div>
+
+      <input
+        type="text"
+        name="address"
+        placeholder="Address"
+        [(ngModel)]="newEmployee.address"
+      />
+
+      <input
+        type="text"
+        name="aadhaar"
+        placeholder="Aadhaar Number"
+        [(ngModel)]="newEmployee.aadhaar"
+        required
+        pattern="[0-9]{12}"
+        title="Aadhaar must be a 12-digit number"
+      />
+
+      <!-- ✅ Updated Designation with mat-select -->
+     <select name="designation" [(ngModel)]="newEmployee.designation" required>
+  <option value="" disabled selected>Select Designation</option>
+  <option value="UI/UX Designer">UI/UX Designer</option>
+  <option value="Backend Developer">Backend Developer</option>
+  <option value="Frontend Developer">Frontend Developer</option>
+  <option value="Project Manager">Project Manager</option>
+</select>
+
+      <select name="department" [(ngModel)]="newEmployee.department" required>
+        <option value="" disabled selected>Select Department</option>
+        <option *ngFor="let dept of departments" [value]="dept">{{ dept }}</option>
+      </select>
+
+      <select name="status" [(ngModel)]="newEmployee.status" required>
+        <option value="Active">Active</option>
+        <option value="Inactive">Inactive</option>
+      </select>
+
+      <!-- ✅ NEW: Added By input -->
+      <input
+        type="text"
+        name="addedBy"
+        placeholder="Added By"
+        [(ngModel)]="newEmployee.addedBy"
+        required
+      />
+    </div>
+
+    <!-- Submit and Cancel Buttons -->
+    <div class="form-actions">
+      <button type="submit" [disabled]="employeeForm.invalid">Submit</button>
+      <button type="button" (click)="toggleAddForm()">Cancel</button>
+    </div>
+  </form>
+</div>
+
+
+      <!-- 🔹 Filters -->
+      <div class="filters">
+        <div class="search-group">
+          <input
+            type="text"
+            placeholder="Search by Name, ID, Email, Contact, Aadhaar, or Added By"
+            [(ngModel)]="searchTerm"
+            (input)="filter()"
+            class="search-input"
+          />
+          <button (click)="filter()" class="search-btn">Search</button>
+        </div>
+
+        <button mat-button [matMenuTriggerFor]="filterMenu" class="filter-icon-btn">
+          <i class="fa fa-filter"></i> Filter
+        </button>
+
+        <!-- 🔹 Filter Menu -->
+        <mat-menu #filterMenu="matMenu" class="filter-menu">
+          <div class="filter-menu-panel">
+            <mat-form-field appearance="fill">
+              <mat-label>Department</mat-label>
+              <mat-select [(value)]="selectedDepartment">
+                <mat-option value="">All</mat-option>
+                <mat-option *ngFor="let dept of departments" [value]="dept">{{ dept }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Designation</mat-label>
+              <mat-select [(value)]="selectedRole">
+                <mat-option value="">All</mat-option>
+                <mat-option value="UI/UX Designer">UI/UX Designer</mat-option>
+                <mat-option value="Backend Developer">Backend Developer</mat-option>
+                <mat-option value="Frontend Developer">Frontend Developer</mat-option>
+                <mat-option value="QA Engineer">QA Engineer</mat-option>
+                <mat-option value="HR Executive">HR Executive</mat-option>
+                <mat-option value="Manager">Manager</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Status</mat-label>
+              <mat-select [(value)]="selectedStatus">
+                <mat-option value="">All</mat-option>
+                <mat-option value="Active">Active</mat-option>
+                <mat-option value="Inactive">Inactive</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Added By</mat-label>
+              <mat-select [(value)]="selectedAddedBy">
+                <mat-option value="">All</mat-option>
+                <mat-option *ngFor="let name of addedByOptions" [value]="name">{{ name }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <div class="filter-actions">
+              <button mat-button color="primary" (click)="filter()">Apply</button>
+              <button mat-button (click)="clearFilters()">Reset</button>
+            </div>
+          </div>
+        </mat-menu>
+      </div>
+
+      <!-- 🔹 Employee Table -->
+      <table class="employee-table">
+        <thead>
+          <tr>
+            <th>Employee ID</th>
+            <th>Name</th>
+            <th>Contact</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Designation</th>
+            <th>Status</th>
+            <th>Aadhaar</th>
+            <th>Added By</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let emp of filteredEmployees">
+            <td>{{ emp.id }}</td>
+            <td>{{ emp.name }}</td>
+            <td>{{ emp.contact }}</td>
+            <td>{{ emp.address }}</td>
+            <td>{{ emp.email }}</td>
+            <td>{{ emp.department }}</td>
+            <td>{{ emp.designation }}</td>
+            <td>{{ emp.status }}</td>
+            <td>{{ emp.aadhaar }}</td>
+            <td>{{ emp.addedBy }}</td>
+            <td>
+              <i class="fas fa-edit me-2" (click)="editEmployee(emp)"></i>
+              <i class="fas fa-trash" (click)="deleteEmployee(emp)"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

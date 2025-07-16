@@ -1,0 +1,66 @@
+.topbar {
+  width: 100%;
+  background-color: #2f3e56;
+  padding: 0.8rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; // Distribute left and right sections
+  border-bottom: 1px solid #1d2a3a;
+
+  .topbar-left {
+    display: flex;
+    align-items: center;
+  }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+
+    span {
+      width: 24px;
+      height: 3px;
+      background-color: #fff;
+      border-radius: 2px;
+    }
+  }
+
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: white;
+    font-size: 14px;
+
+    i.fas {
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+
+      img {
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+      }
+
+      span {
+        display: flex;
+        align-items: center;
+        gap: 0.2rem;
+      }
+    }
+  }
+}
+
+// 📱 Mobile: show hamburger icon
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+}

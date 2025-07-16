@@ -1,0 +1,61 @@
+<div class="dashboard-container">
+  <app-sidebar [class.active]="isSidebarOpen"></app-sidebar>
+
+  <div class="main-content">
+   <app-topbar (toggleSidebarEvent)="toggleSidebar()"></app-topbar>
+
+    <div class="dashboard-content">
+      <!-- 🔢 Stats Cards Section -->
+      <div class="stats">
+        <div class="card">
+          <h4><i class="fas fa-users me-2"></i>Total Employees</h4>
+          <p>{{ totalEmployees }}</p>
+          <small *ngIf="newEmployees !== 0">+{{ newEmployees }} this month</small>
+        </div>
+
+        <div class="card">
+          <h4><i class="fas fa-user-check me-2"></i>Today's Attendance</h4>
+          <p>{{ todaysAttendance }}%</p>
+          <small *ngIf="attendanceChange !== 0">+{{ attendanceChange }}% vs yesterday</small>
+        </div>
+
+        <div class="card">
+          <h4><i class="fas fa-wallet me-2"></i>Monthly Payroll</h4>
+          <p>{{ payroll | currency: 'INR' }}</p>
+          <small>{{ payrollStatus || 'Pending' }}</small>
+        </div>
+
+        <div class="card">
+          <h4><i class="fas fa-plane-departure me-2"></i>Active Leaves</h4>
+          <p>{{ activeLeaves }}</p>
+          <small>{{ pendingLeaves }} pending requests</small>
+        </div>
+      </div>
+
+      <!-- 📈 Chart Section -->
+      <div class="chart-section">
+        <div class="chart-header">
+          <h5><i class="fas fa-chart-line me-2"></i>Attendance Trend</h5>
+          <span *ngIf="!hasPositiveAttendance()" class="no-data-text">No attendance data to display.</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="attendanceChart"></canvas>
+        </div>
+      </div>
+
+      <!-- 📰 Activity Section -->
+      <div class="activity-section">
+        <h5><i class="fas fa-bolt me-2"></i>Recent Activities</h5>
+        <ul>
+          <li><i class="fas fa-user-plus me-2"></i>Welcome John Doe to the team!</li>
+          <li><i class="fas fa-birthday-cake me-2"></i>Wish Sarah a Happy Birthday!</li>
+          <li><i class="fas fa-user-check me-2"></i>Mike marked attendance.</li>
+          <li><i class="fas fa-thumbs-up me-2"></i>Sarah approved Mike’s leave.</li>
+          <li><i class="fas fa-money-check-alt me-2"></i>Monthly payroll processed.</li>
+          <li><i class="fas fa-trophy me-2"></i>Company awarded ‘Best Workplace 2025’.</li>
+          <li><i class="fas fa-bullhorn me-2"></i>Townhall meeting on Monday at 10 AM.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
