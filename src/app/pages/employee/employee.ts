@@ -37,22 +37,23 @@ export class EmployeeComponent implements OnInit {
 
   searchTerm = '';
   selectedDepartment = '';
-  selectedRole = '';
+  selecteDesignation = '';
   selectedStatus = '';
   selectedAddedBy = '';
   selectedCountryCode: string = '+91';
 
   departments: string[] = ['HR', 'Tech', 'Design'];
-  roles: string[] = ['Admin', 'Manager', 'Employee'];
+  designation: string[] = ['Admin','UI/UX Designer','Backend Developer','Frontend Developer','QA Engineer','HR Executive','Manager'];
   statuses: string[] = ['Active', 'Inactive'];
   addedByOptions: string[] = [];
 
   currentUser = {
     name: 'Chanchal Chetwani',
-    role: 'HR'
+    designation: 'HR Executive'
   };
 
   showAddForm: boolean = false;
+   showFilterPanel: boolean = false;
   newEmployee: Employee = this.getEmptyEmployee();
 
   constructor(private employeeService: EmployeeService) {}
@@ -66,10 +67,9 @@ export class EmployeeComponent implements OnInit {
         contact: '+919876543210',
         address: 'Pune, Maharashtra',
         aadhaar: '123456789123',
-        designation: 'UI/UX designer',
+        designation: 'UI/UX Designer',
         status: 'Active',
         department: 'Design',
-        role: 'Employee',
         addedBy: 'Admin User'
       },
       {
@@ -82,7 +82,6 @@ export class EmployeeComponent implements OnInit {
         designation: 'Backend Developer',
         status: 'Inactive',
         department: 'Tech',
-        role: 'Manager',
         addedBy: 'HR Lead'
       }
     ];
@@ -111,7 +110,7 @@ export class EmployeeComponent implements OnInit {
         (emp.addedBy?.toLowerCase().includes(search))
       )) &&
       (!this.selectedDepartment || emp.department === this.selectedDepartment) &&
-      (!this.selectedRole || emp.role === this.selectedRole) &&
+      (!this.selecteDesignation || emp.designation === this.selecteDesignation) &&
       (!this.selectedStatus || emp.status === this.selectedStatus) &&
       (!this.selectedAddedBy || emp.addedBy === this.selectedAddedBy)
     );
@@ -120,7 +119,7 @@ export class EmployeeComponent implements OnInit {
   clearFilters(): void {
     this.searchTerm = '';
     this.selectedDepartment = '';
-    this.selectedRole = '';
+    this.selecteDesignation = '';
     this.selectedStatus = '';
     this.selectedAddedBy = '';
     this.filter();
@@ -136,6 +135,16 @@ export class EmployeeComponent implements OnInit {
       this.employeeService.deleteEmployee(emp.id);
     }
   }
+
+  toggleFilterPanel() {
+    this.showFilterPanel = !this.showFilterPanel;
+  }
+
+  applyFilter() {
+    this.filter();
+    this.showFilterPanel = false;
+  }
+
 
   toggleAddForm(): void {
     this.showAddForm = !this.showAddForm;
@@ -175,7 +184,6 @@ export class EmployeeComponent implements OnInit {
       designation: '',
       status: 'Active',
       department: '',
-      role: '',
       addedBy: ''
     };
   }
@@ -208,7 +216,7 @@ export class EmployeeComponent implements OnInit {
   }
 
   exportToCSV(): void {
-    const headers = ['ID', 'Name', 'Email', 'Contact', 'Address', 'Aadhaar', 'Designation', 'Status', 'Department', 'Role', 'Added By'];
+    const headers = ['ID', 'Name', 'Email', 'Contact', 'Address', 'Aadhaar', 'Designation', 'Status', 'Department','Added By'];
     const rows = this.filteredEmployees.map(emp => [
       emp.id,
       emp.name,
@@ -219,7 +227,6 @@ export class EmployeeComponent implements OnInit {
       emp.designation,
       emp.status,
       emp.department || '',
-      emp.role || '',
       emp.addedBy || ''
     ]);
 

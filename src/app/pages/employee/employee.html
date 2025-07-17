@@ -8,9 +8,11 @@
       <!-- 🔹 Header Row -->
       <div class="header-row">
         <h3>Employee Management</h3>
-        <button *ngIf="currentUser.role === 'Admin' || currentUser.role === 'HR'" (click)="toggleAddForm()">
-          {{ showAddForm ? 'Close' : 'Add Employee' }}
-        </button>
+       <!--<button *ngIf="currentUser.designation === 'Admin' || currentUser.designation === 'HR'" (click)="toggleAddForm()">-->
+  <button (click)="toggleAddForm()">
+  {{ showAddForm ? 'Close' : 'Add Employee' }}
+</button>
+
       </div>
 
       <!-- 🔹 Add Employee Form -->
@@ -111,71 +113,73 @@
 </div>
 
 
-      <!-- 🔹 Filters -->
+      <!-- 🔹 Filters  
+        placeholder="Search by Name, ID, Email, Contact, Aadhaar, or Added By"-->
       <div class="filters">
-        <div class="search-group">
-          <input
-            type="text"
-            placeholder="Search by Name, ID, Email, Contact, Aadhaar, or Added By"
-            [(ngModel)]="searchTerm"
-            (input)="filter()"
-            class="search-input"
-          />
-          <button (click)="filter()" class="search-btn">Search</button>
-        </div>
+  <div class="search-group">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="filter()"
+      class="search-input"
+      placeholder="Search by Name, ID, Email, Contact, Aadhaar, or Added By"
+    />
+    <button (click)="filter()" class="search-btn">Search</button>
+  </div>
 
-        <button mat-button [matMenuTriggerFor]="filterMenu" class="filter-icon-btn">
-          <i class="fa fa-filter"></i> Filter
-        </button>
+  <!-- 🔹 Toggle Filter Panel Button -->
+  <button mat-button (click)="toggleFilterPanel()" class="filter-icon-btn">
+    <i class="fa fa-filter" aria-hidden="true"></i> Filter
+  </button>
 
-        <!-- 🔹 Filter Menu -->
-        <mat-menu #filterMenu="matMenu" class="filter-menu">
-          <div class="filter-menu-panel">
-            <mat-form-field appearance="fill">
-              <mat-label>Department</mat-label>
-              <mat-select [(value)]="selectedDepartment">
-                <mat-option value="">All</mat-option>
-                <mat-option *ngFor="let dept of departments" [value]="dept">{{ dept }}</mat-option>
-              </mat-select>
-            </mat-form-field>
+  <!-- 🔹 Custom Filter Panel (Always Visible Until Action) -->
+  <div *ngIf="showFilterPanel" class="custom-filter-panel">
+    <mat-form-field appearance="fill">
+      <mat-label>Department</mat-label>
+      <mat-select [(value)]="selectedDepartment">
+        <mat-option value="">All</mat-option>
+        <mat-option *ngFor="let dept of departments" [value]="dept">{{ dept }}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-            <mat-form-field appearance="fill">
-              <mat-label>Designation</mat-label>
-              <mat-select [(value)]="selectedRole">
-                <mat-option value="">All</mat-option>
-                <mat-option value="UI/UX Designer">UI/UX Designer</mat-option>
-                <mat-option value="Backend Developer">Backend Developer</mat-option>
-                <mat-option value="Frontend Developer">Frontend Developer</mat-option>
-                <mat-option value="QA Engineer">QA Engineer</mat-option>
-                <mat-option value="HR Executive">HR Executive</mat-option>
-                <mat-option value="Manager">Manager</mat-option>
-              </mat-select>
-            </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Designation</mat-label>
+      <mat-select [(value)]="selecteDesignation">
+        <mat-option value="">All</mat-option>
+        <mat-option value="UI/UX Designer">UI/UX Designer</mat-option>
+        <mat-option value="Backend Developer">Backend Developer</mat-option>
+        <mat-option value="Frontend Developer">Frontend Developer</mat-option>
+        <mat-option value="QA Engineer">QA Engineer</mat-option>
+        <mat-option value="HR Executive">HR Executive</mat-option>
+        <mat-option value="Manager">Manager</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-            <mat-form-field appearance="fill">
-              <mat-label>Status</mat-label>
-              <mat-select [(value)]="selectedStatus">
-                <mat-option value="">All</mat-option>
-                <mat-option value="Active">Active</mat-option>
-                <mat-option value="Inactive">Inactive</mat-option>
-              </mat-select>
-            </mat-form-field>
+   
+    <mat-form-field appearance="fill">
+      <mat-label>Status</mat-label>
+      <mat-select [(value)]="selectedStatus">
+        <mat-option value="">All</mat-option>
+        <mat-option value="Active">Active</mat-option>
+        <mat-option value="Inactive">Inactive</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-            <mat-form-field appearance="fill">
-              <mat-label>Added By</mat-label>
-              <mat-select [(value)]="selectedAddedBy">
-                <mat-option value="">All</mat-option>
-                <mat-option *ngFor="let name of addedByOptions" [value]="name">{{ name }}</mat-option>
-              </mat-select>
-            </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Added By</mat-label>
+      <mat-select [(value)]="selectedAddedBy">
+        <mat-option value="">All</mat-option>
+        <mat-option *ngFor="let name of addedByOptions" [value]="name">{{ name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
 
-            <div class="filter-actions">
-              <button mat-button color="primary" (click)="filter()">Apply</button>
-              <button mat-button (click)="clearFilters()">Reset</button>
-            </div>
-          </div>
-        </mat-menu>
-      </div>
+    <!-- 🔹 Filter Action Buttons -->
+    <div class="filter-actions">
+      <button mat-stroked-button color="primary" (click)="applyFilter()">Apply</button>
+      <button mat-button (click)="clearFilters()">Reset</button>
+    </div>
+  </div>
+</div>
 
       <!-- 🔹 Employee Table -->
       <table class="employee-table">
