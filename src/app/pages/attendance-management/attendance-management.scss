@@ -1,0 +1,234 @@
+.attendance-container {
+  display: flex;
+  height: 100vh;
+  background-color: #f0f2f5;
+  font-family: 'Segoe UI', sans-serif;
+
+  app-sidebar {
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background-color: #2f3e56;
+    z-index: 1000;
+  }
+
+  .main-content {
+    margin-left: 250px;
+    width: calc(100% - 250px);
+    display: flex;
+    flex-direction: column;
+    padding-top: 60px;
+
+    app-topbar {
+      position: fixed;
+      top: 0;
+      left: 250px;
+      right: 0;
+      height: 60px;
+      background-color: #2f3e56;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 20px;
+      color: white;
+      z-index: 1001;
+      border-bottom: 1px solid #1d2a3a;
+    }
+
+    .content-wrapper {
+      padding: 2rem;
+      overflow-y: auto;
+      height: calc(100vh - 60px);
+    }
+
+    .attendance-card {
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+      padding: 1.5rem;
+      margin: 3rem;
+      max-width: 1550px;
+
+      h3, h5 {
+        margin-bottom: 1rem;
+        font-weight: 600;
+      }
+
+      .header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+
+        .actions {
+          display: flex;
+          gap: 0.5rem;
+
+          button {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+          }
+        }
+      }
+
+      .search-input {
+        display: flex;
+        align-items: center;
+        background: #f1f1f1;
+        padding: 0.4rem 0.75rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+
+        i {
+          margin-right: 0.5rem;
+          color: #777;
+        }
+
+        input {
+          flex: 1;
+          border: none;
+          background: transparent;
+          outline: none;
+          font-size: 0.95rem;
+        }
+      }
+
+      .table-container {
+        overflow-x: auto;
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
+
+          thead {
+            background-color: #f9fafb;
+
+            th {
+              padding: 0.75rem;
+              font-weight: 600;
+              text-align: left;
+              font-size: 0.85rem;
+              color: #333;
+              white-space: nowrap;
+            }
+          }
+
+          tbody {
+            tr {
+              border-top: 1px solid #eaeaea;
+
+              &:hover {
+                background-color: #f5f7fa;
+              }
+
+              td {
+                padding: 0.75rem;
+                font-size: 0.85rem;
+                color: #444;
+                white-space: nowrap;
+
+                input[type="checkbox"] {
+                  transform: scale(1.1);
+                  margin-right: 0.4rem;
+                }
+
+                i {
+                  cursor: pointer;
+                  font-size: 1rem;
+                  transition: transform 0.2s;
+                }
+
+                .text-success {
+                  color: #2ecc71;
+
+                  &:hover {
+                    color: #218838;
+                    transform: scale(1.1);
+                  }
+                }
+
+                .text-danger {
+                  color: #e74c3c;
+
+                  &:hover {
+                    color: #c82333;
+                    transform: scale(1.1);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // Ensure spacing between multiple cards
+      & + .attendance-card {
+        margin-top: 2rem;
+      }
+    }
+  }
+
+  // Status tag classes
+  .status {
+    font-weight: 600;
+
+    &.present {
+      color: #28a745;
+    }
+
+    &.late {
+      color: #ffc107;
+    }
+
+    &.absent {
+      color: #dc3545;
+    }
+
+    &.pending {
+      color: #007bff;
+    }
+  }
+}
+
+// Responsive tweaks
+@media (max-width: 768px) {
+  .attendance-container {
+    flex-direction: column;
+
+    app-sidebar {
+      position: relative;
+      width: 100%;
+      height: auto;
+    }
+
+    .main-content {
+      margin-left: 0;
+      width: 100%;
+
+      app-topbar {
+        left: 0;
+      }
+
+      .content-wrapper {
+        padding: 1rem;
+        height: auto;
+      }
+
+      .attendance-card {
+        padding: 1rem;
+
+        .header-row {
+          flex-direction: column;
+          align-items: flex-start;
+
+          .actions {
+            margin-top: 0.75rem;
+          }
+        }
+      }
+    }
+  }
+}

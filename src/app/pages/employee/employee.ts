@@ -51,6 +51,9 @@ export class EmployeeComponent implements OnInit {
     name: 'Chanchal Chetwani',
     designation: 'HR Executive'
   };
+  editingEmployee: Employee = this.getEmptyEmployee();
+
+
 
   showAddForm: boolean = false;
    showFilterPanel: boolean = false;
@@ -125,9 +128,9 @@ export class EmployeeComponent implements OnInit {
     this.filter();
   }
 
-  editEmployee(emp: Employee): void {
-    alert(`Edit Employee: ${emp.name} (${emp.id})`);
-  }
+ editEmployee(emp: Employee): void {
+  this.startEditing(emp);
+}
 
   deleteEmployee(emp: Employee): void {
     const confirmDelete = confirm(`Are you sure you want to delete ${emp.name}?`);
@@ -237,5 +240,37 @@ export class EmployeeComponent implements OnInit {
     link.setAttribute("href", url);
     link.setAttribute("download", "employees.csv");
     link.click();
+
   }
+
+canEdit(emp: Employee): boolean {
+  return this.currentUser.designation === 'Admin' || this.currentUser.designation === 'HR Executive';
+}
+
+startEditing(emp: Employee): void {
+  if (this.canEdit(emp)) {
+    this.editingEmployee = { ...emp };
+  }
+}
+
+cancelEdit(): void {
+this.editingEmployee = this.getEmptyEmployee();
+
+}
+
+saveEdit(): void {
+  if (!this.editingEmployee) return;
+
+  const index = this.employees.findIndex(e => e.id === this.editingEmployee?.id);
+  if (index !== -1) {
+    this.employees[index] = { ...this.editingEmployee };
+    this.filteredEmployees[index] = { ...this.editingEmployee };
+    this.employeeService.setEmployees([...this.employees]);
+    alert('Employee details updated successfully!');
+  }
+
+  this.editingEmployee = this.getEmptyEmployee();
+
+
+}
 }

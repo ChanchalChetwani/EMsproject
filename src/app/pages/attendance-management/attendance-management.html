@@ -1,0 +1,125 @@
+<div class="attendance-container">
+  <app-sidebar></app-sidebar>
+
+  <div class="main-content">
+    <app-topbar></app-topbar>
+
+    <div class="attendance-card">
+      <!-- Attendance Section -->
+      <div class="header-row">
+        <h3>Attendance Management</h3>
+        <div class="actions">
+          <button class="btn btn-light"><i class="bi bi-funnel"></i> View</button>
+          <button class="btn btn-primary" (click)="downloadReport()">
+  <i class="bi bi-download"></i> Download
+</button>
+        </div>
+      </div>
+<div class="search-input">
+  <i class="fas fa-search"></i>
+  <input
+    type="text"
+    [(ngModel)]="searchCorrection"
+    placeholder="Search"
+    class="form-control"
+    (input)="onCorrectionSearch()"
+  />
+</div>
+
+
+      <div class="table-container">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th><input type="checkbox" (change)="toggleSelectAll($event)" [checked]="selectAllChecked" /></th>
+              <th>Employee Id</th>
+              <th>Name</th>
+              <th>Designation</th>
+              <th>Check In</th>
+              <th>Check Out</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let emp of filteredAttendanceList">
+              <td><input type="checkbox" [(ngModel)]="emp.selected" /></td>
+              <td>{{ emp.employeeId }}</td>
+              <td>{{ emp.name }}</td>
+              <td>{{ emp.designation }}</td>
+              <td>{{ emp.checkIn }}</td>
+              <td>{{ emp.checkOut }}</td>
+              <td>
+                <span [ngClass]="getStatusClass(emp.status)">
+                  {{ emp.status }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+   <div class="attendance-card mt-4">
+  <h5>Correction Requests</h5>
+
+  <div class="search-input">
+    <i class="fas fa-search"></i>
+    <input
+      type="text"
+      [(ngModel)]="searchCorrection"
+      placeholder="Search"
+      class="form-control"
+    />
+  </div>
+
+  <div class="table-container">
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>
+            <input
+              type="checkbox"
+              [(ngModel)]="selectAll"
+              (change)="toggleAllSelection()"
+            />
+          </th>
+          <th>Employee Id</th>
+          <th>Name</th>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Original</th>
+          <th>Requested</th>
+          <th>Reason</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let req of filteredCorrections">
+          <td>
+            <input
+              type="checkbox"
+              [(ngModel)]="req.selected"
+              (change)="onIndividualCheckboxChange()"
+            />
+          </td>
+          <td>{{ req.id }}</td>
+          <td>{{ req.name }}</td>
+          <td>{{ req.date }}</td>
+          <td>{{ req.type }}</td>
+          <td>{{ req.original }}</td>
+          <td>{{ req.requested }}</td>
+          <td>{{ req.reason }}</td>
+          <td>
+            <i class="bi bi-check-circle text-success me-2"></i>
+            <i class="bi bi-x-circle text-danger"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+ <!-- <app-correction-requests></app-correction-requests>-->
+
+</div>
+

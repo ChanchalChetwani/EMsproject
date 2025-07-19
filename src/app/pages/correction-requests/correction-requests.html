@@ -1,0 +1,30 @@
+<div class="correction-container">
+  <h3>Correction Requests</h3>
+
+  <input
+    type="text"
+    placeholder="Search corrections..."
+    [(ngModel)]="searchCorrection"
+    (input)="onCorrectionSearch()"
+    class="search-input"
+  />
+
+  <table class="correction-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Employee Name</th>
+        <th>Date</th>
+        <th>Reason</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let correction of filteredCorrections">
+        <td>{{ correction.id }}</td>
+        <td>{{ correction.name }}</td>
+        <td>{{ correction.date }}</td>
+        <td>{{ correction.reason }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

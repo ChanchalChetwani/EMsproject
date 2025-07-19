@@ -182,41 +182,68 @@
 </div>
 
       <!-- 🔹 Employee Table -->
-      <table class="employee-table">
-        <thead>
-          <tr>
-            <th>Employee ID</th>
-            <th>Name</th>
-            <th>Contact</th>
-            <th>Address</th>
-            <th>Email</th>
-            <th>Department</th>
-            <th>Designation</th>
-            <th>Status</th>
-            <th>Aadhaar</th>
-            <th>Added By</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let emp of filteredEmployees">
-            <td>{{ emp.id }}</td>
-            <td>{{ emp.name }}</td>
-            <td>{{ emp.contact }}</td>
-            <td>{{ emp.address }}</td>
-            <td>{{ emp.email }}</td>
-            <td>{{ emp.department }}</td>
-            <td>{{ emp.designation }}</td>
-            <td>{{ emp.status }}</td>
-            <td>{{ emp.aadhaar }}</td>
-            <td>{{ emp.addedBy }}</td>
-            <td>
-              <i class="fas fa-edit me-2" (click)="editEmployee(emp)"></i>
-              <i class="fas fa-trash" (click)="deleteEmployee(emp)"></i>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+     <table class="employee-table">
+  <thead>
+    <tr>
+      <th>Employee ID</th>
+      <th>Name</th>
+      <th>Contact</th>
+      <th>Address</th>
+      <th>Email</th>
+      <th>Department</th>
+      <th>Designation</th>
+      <th>Status</th>
+      <th>Aadhaar</th>
+      <th>Added By</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let emp of filteredEmployees">
+      <ng-container *ngIf="editingEmployee?.id !== emp.id; else editRow">
+        <td>{{ emp.id }}</td>
+        <td>{{ emp.name }}</td>
+        <td>{{ emp.contact }}</td>
+        <td>{{ emp.address }}</td>
+        <td>{{ emp.email }}</td>
+        <td>{{ emp.department }}</td>
+        <td>{{ emp.designation }}</td>
+        <td>{{ emp.status }}</td>
+        <td>{{ emp.aadhaar }}</td>
+        <td>{{ emp.addedBy }}</td>
+        <td class="action-icons">
+          <button *ngIf="canEdit(emp)" (click)="startEditing(emp)">
+            ✏️
+          </button>
+          <button (click)="deleteEmployee(emp)">🗑️</button>
+        </td>
+      </ng-container>
+
+      <!-- 🔸 Edit Row -->
+      <ng-template #editRow>
+        <td>{{ editingEmployee.id }}</td>
+        <td><input [(ngModel)]="editingEmployee.name" /></td>
+        <td><input [(ngModel)]="editingEmployee.contact" /></td>
+        <td><input [(ngModel)]="editingEmployee.address" /></td>
+        <td><input [(ngModel)]="editingEmployee.email" /></td>
+        <td><input [(ngModel)]="editingEmployee.department" /></td>
+        <td><input [(ngModel)]="editingEmployee.designation" /></td>
+        <td>
+          <select [(ngModel)]="editingEmployee.status">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </td>
+        <td><input [(ngModel)]="editingEmployee.aadhaar" /></td>
+        <td><input [(ngModel)]="editingEmployee.addedBy" /></td>
+        <td class="action-icons">
+          <button (click)="saveEdit()">✅</button>
+          <button (click)="cancelEdit()">❌</button>
+        </td>
+      </ng-template>
+    </tr>
+  </tbody>
+</table>
     </div>
   </div>
 </div>

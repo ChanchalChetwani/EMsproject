@@ -19,6 +19,13 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/employee/employee').then(m => m.EmployeeComponent),
   },
   {
+    path: 'attendance',
+    loadChildren: () =>
+      import('./pages/attendance-management/attendance.routes').then(
+        (m) => m.ATTENDANCE_ROUTES
+      ),
+  },
+  {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'
