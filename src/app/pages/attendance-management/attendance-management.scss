@@ -74,6 +74,18 @@
         }
       }
 
+      .light-gray-btn {
+  background-color: #a3a1a1; /* light gray */
+  color: #333; /* dark text for contrast */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 12px;
+
+  &:hover {
+    background-color: #e0e0e0;
+  }
+}
+
       .search-input {
         display: flex;
         align-items: center;

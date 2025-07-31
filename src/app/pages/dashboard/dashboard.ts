@@ -9,6 +9,7 @@ import { Topbar } from '../../shared/topbar/topbar';
 // Services
 import { DashboardService } from '../../services/dashboard.service';
 import { EmployeeService } from '../../services/employee.service';
+import { AttendanceService } from '../../services/attendance.service';
 
 Chart.register(...registerables);
 
@@ -22,7 +23,7 @@ Chart.register(...registerables);
 export class Dashboard implements OnInit {
   totalEmployees = 0;
   newEmployees = 0;
-  todaysAttendance = 0;
+  todaysAttendance: number = 0; // This will show count
   attendanceChange = 0;
   payroll = 0;
   payrollStatus = '';
@@ -30,6 +31,7 @@ export class Dashboard implements OnInit {
   pendingLeaves = 0;
 
   attendanceData: number[] = [];
+  attendanceLabels: string[] = [];
   attendanceChart: Chart | null = null;
 
   recentActivities: { icon: string; message: string }[] = [];
@@ -38,41 +40,56 @@ export class Dashboard implements OnInit {
 
   constructor(
     private dashboardService: DashboardService,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private attendanceService: AttendanceService
   ) {}
 
   ngOnInit(): void {
-    // ✅ Fetch real-time employee count
+    // ✅ Fetch total employees
     this.employeeService.employees$.subscribe(empList => {
       this.totalEmployees = empList.length;
     });
 
-    // Load rest of dashboard data
-    this.dashboardService.getDashboardStats().subscribe({
-      next: (res) => {
-        // NOTE: totalEmployees now comes from EmployeeService (not res.totalEmployees)
-        this.newEmployees = res.newEmployees;
-        this.todaysAttendance = res.attendanceToday;
-        this.attendanceChange = res.attendanceChange;
-        this.payroll = res.payroll;
-        this.payrollStatus = res.payrollStatus;
-        this.activeLeaves = res.activeLeaves;
-        this.pendingLeaves = res.pendingLeaves;
-
-        this.attendanceData = Array.isArray(res.attendanceTrend) && res.attendanceTrend.length
-          ? res.attendanceTrend
-          : [0, 0, 0, 0, 0];
-
-        this.loadRecentActivities();
-        this.renderAttendanceChart();
-      },
-      error: (err) => {
-        console.error('Failed to fetch dashboard stats', err);
-        this.attendanceData = [0, 0, 0, 0, 0];
-        this.renderAttendanceChart();
-      }
+ this.attendanceService.getTodayApprovedPresentCount().subscribe((count) => {
+      this.todaysAttendance = count;
     });
-  }
+
+
+     // ✅ Load the rest of dashboard stats
+  this.dashboardService.getDashboardStats().subscribe({
+    next: (res) => {
+      this.newEmployees = res.newEmployees;
+      this.attendanceChange = res.attendanceChange;
+      this.payroll = res.payroll;
+      this.payrollStatus = res.payrollStatus;
+      this.activeLeaves = res.activeLeaves;
+      this.pendingLeaves = res.pendingLeaves;
+
+      const currentMonth = new Date().getMonth();
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+      this.attendanceData = [];
+      this.attendanceLabels = [];
+
+      for (let i = 0; i <= currentMonth; i++) {
+        const count = res.attendanceTrend?.[i] ?? 0;
+        const percent = this.totalEmployees > 0 ? Math.round((count / this.totalEmployees) * 100) : 0;
+
+        this.attendanceData.push(percent);
+        this.attendanceLabels.push(monthNames[i]);
+      }
+
+      this.loadRecentActivities();
+      this.renderAttendanceChart();
+    },
+    error: (err) => {
+      console.error('Failed to fetch dashboard stats', err);
+      this.attendanceData = [0];
+      this.attendanceLabels = ['N/A'];
+      this.renderAttendanceChart();
+    }
+  });
+}
 
   hasPositiveAttendance(): boolean {
     return Array.isArray(this.attendanceData) && this.attendanceData.some(val => val > 0);
@@ -89,10 +106,10 @@ export class Dashboard implements OnInit {
     this.attendanceChart = new Chart(canvas, {
       type: 'line',
       data: {
-        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+        labels: this.attendanceLabels,
         datasets: [
           {
-            label: 'Attendance',
+            label: 'Attendance (%)',
             data: this.attendanceData,
             borderColor: '#00c292',
             backgroundColor: 'rgba(0,194,146,0.1)',
@@ -114,8 +131,9 @@ export class Dashboard implements OnInit {
         scales: {
           y: {
             beginAtZero: true,
+            max: 100,
             ticks: {
-              stepSize: 1
+              stepSize: 20
             }
           }
         }

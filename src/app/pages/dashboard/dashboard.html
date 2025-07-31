@@ -15,8 +15,8 @@
 
         <div class="card">
           <h4><i class="fas fa-user-check me-2"></i>Today's Attendance</h4>
-          <p>{{ todaysAttendance }}%</p>
-          <small *ngIf="attendanceChange !== 0">+{{ attendanceChange }}% vs yesterday</small>
+           <h2>{{ todaysAttendance }}</h2> <!-- 👈 Displays actual number -->
+          <small *ngIf="attendanceChange !== 0">+{{ attendanceChange }} vs yesterday</small>
         </div>
 
         <div class="card">

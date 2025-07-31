@@ -1,0 +1,53 @@
+<div class="dashboard-container">
+  <app-sidebar></app-sidebar>
+
+  <div class="main-content">
+    <app-topbar></app-topbar>
+<div class="leave-management-container">
+  <div class="header">
+    <h2>Leave Management</h2>
+    <div class="actions">
+      <input type="text" placeholder="Search" class="search-box" />
+      <button class="filter-button">
+        <span class="icon">&#128269;</span>
+        Leaves
+      </button>
+    </div>
+  </div>
+
+  <div class="leave-table">
+    <table>
+      <thead>
+        <tr>
+          <th><input type="checkbox" /></th>
+          <th>Employee id</th>
+          <th>Name</th>
+          <th>Leave type</th>
+          <th>From</th>
+          <th>To</th>
+          <th>Balance</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let leave of leaves">
+          <td><input type="checkbox" /></td>
+          <td>{{ leave.employeeId }}</td>
+          <td>{{ leave.name }}</td>
+          <td>{{ leave.type }}</td>
+          <td>{{ leave.from }}</td>
+          <td>{{ leave.to }}</td>
+          <td>{{ leave.balance }}</td>
+          <td>
+            <span [ngClass]="leave.status.toLowerCase()">{{ leave.status }}</span>
+          </td>
+          <td class="actions">
+            <button class="approve">&#10004;</button>
+            <button class="reject">&#10060;</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -26,6 +26,10 @@ export const routes: Routes = [
       ),
   },
   {
+  path: 'leaves',
+  loadComponent: () => import('./pages/leaves').then(m => m.Leaves)
+},
+  {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'
