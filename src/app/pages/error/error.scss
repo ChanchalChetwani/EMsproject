@@ -1,0 +1,43 @@
+.error-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: #f8f9fa;
+
+  h1 {
+    font-size: 6rem;
+    color: #dc3545; // Red
+    margin: 0;
+  }
+
+  h2 {
+    font-size: 2rem;
+    margin: 10px 0;
+    color: #343a40;
+  }
+
+  p {
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin-bottom: 20px;
+  }
+
+  .go-home-btn {
+    background-color: #007bff; // Blue button
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s ease;
+
+    &:hover {
+      background-color: #0056b3;
+      transform: translateY(-2px);
+    }
+  }
+}

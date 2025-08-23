@@ -10,6 +10,8 @@ import { Topbar } from '../../shared/topbar/topbar';
 import { DashboardService } from '../../services/dashboard.service';
 import { EmployeeService } from '../../services/employee.service';
 import { AttendanceService } from '../../services/attendance.service';
+import { LeaveService } from '../../services/leave.service';
+
 
 Chart.register(...registerables);
 

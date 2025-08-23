@@ -1,0 +1,28 @@
+<div class="dashboard-container">
+  <app-sidebar></app-sidebar>
+  <div class="main-content">
+    <app-topbar></app-topbar>
+
+    <div class="reports-container">
+      <!-- ✅ Stats -->
+      <div class="stats-cards">
+        <div class="card"><p>Total Employees</p><h2>{{ totalEmployees }}</h2></div>
+        <div class="card"><p>Total Payroll</p><h2>₹ {{ totalPayroll | number }}</h2></div>
+        <div class="card"><p>Performance Score</p><h2>{{ performanceScore }}%</h2></div>
+      </div>
+
+      <!-- ✅ Chart -->
+      <div class="chart-card">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h3>Payroll Report</h3>
+          <select [(ngModel)]="selectedView" (change)="onViewChange(selectedView)">
+            <option value="daily">Daily View</option>
+            <option value="monthly">Monthly View</option>
+            <option value="yearly">Yearly View</option>
+          </select>
+        </div>
+        <canvas baseChart [data]="chartConfig.data" [options]="chartConfig.options" [type]="chartConfig.type"></canvas>
+      </div>
+    </div>
+  </div>
+</div>

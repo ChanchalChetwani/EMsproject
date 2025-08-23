@@ -1,47 +1,48 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { Leave } from '../models/leave.model';
 
-export interface LeaveRecord {
-  employeeId: string;
-  name: string;
-  leaveType: string;
-  from: string;
-  to: string;
-  status: 'Approved' | 'Pending' | 'Rejected';
-}
-
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class LeaveService {
-  constructor() {}
-
-  private leaves: LeaveRecord[] = [
+  private leaves: Leave[] = [
     {
-      employeeId: 'EMP001',
-      name: 'John Doe',
+      id: 1,
+      employeeId: 'EMS12345',
+      employeeName: 'Sanika Kalaskar',
       leaveType: 'Sick Leave',
-      from: '2025-07-28',
-      to: '2025-07-30',
-      status: 'Approved',
-    },
-    {
-      employeeId: 'EMP002',
-      name: 'Jane Smith',
-      leaveType: 'Casual Leave',
-      from: '2025-07-29',
-      to: '2025-07-31',
+      startDate: '2025-01-21',
+      endDate: '2025-01-25',
+      balance: '15 days',
       status: 'Pending',
+      name: 'Sanika Kalaskar'
     },
     {
-      employeeId: 'EMP003',
-      name: 'Rahul Singh',
-      leaveType: 'Paid Leave',
-      from: '2025-07-25',
-      to: '2025-07-27',
-      status: 'Rejected',
-    },
+      id: 2,
+      employeeId: 'EMS12345',
+      employeeName: 'Sanika Kalaskar',
+      leaveType: 'Casual Leave',
+      startDate: '2025-02-01',
+      endDate: '2025-02-03',
+      balance: '10 days',
+      status: 'Pending',
+      name: 'Sanika Kalaskar'
+    }
   ];
 
-  getAllLeaves(): Observable<LeaveRecord[]> {
+  constructor() {}
+
+  // ✅ Get all leaves
+  getLeaves(): Observable<Leave[]> {
     return of(this.leaves);
+  }
+
+  // ✅ Update leave status (Approve/Reject)
+  updateLeaveStatus(id: number, status: 'Approved' | 'Rejected'): void {
+    const leave = this.leaves.find(l => l.id === id);
+    if (leave) {
+      leave.status = status;
+    }
   }
 }

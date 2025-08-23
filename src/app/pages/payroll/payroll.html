@@ -1,0 +1,188 @@
+<div class="dashboard-container">
+  <app-sidebar></app-sidebar>
+
+  <div class="main-content">
+    <app-topbar></app-topbar>
+
+    <div class="payroll-container">
+
+      <!-- ✅ Top Stats Cards -->
+      <div class="stats-cards">
+        <div class="card">
+          <div class="icon"><i class="fas fa-users"></i></div>
+          <p>Total Employees</p>
+          <h2>{{ totalEmployees }}</h2>
+        </div>
+
+        <div class="card">
+          <div class="icon"><i class="fas fa-file-invoice-dollar"></i></div>
+          <p>On Processed Payrolls</p>
+          <h2>{{ processedPayrolls }}</h2>
+        </div>
+
+        <div class="card">
+          <div class="icon"><i class="fas fa-check-circle text-success"></i></div>
+          <p>Successful Payrolls</p>
+          <h2>{{ successfulPayrolls }}</h2>
+        </div>
+
+        <div class="card">
+          <div class="icon"><i class="fas fa-clock text-warning"></i></div>
+          <p>Pending Payrolls</p>
+          <h2>{{ pendingPayrolls }}</h2>
+        </div>
+      </div>
+
+      <!-- ✅ Payroll Processing Table -->
+      <div class="table-container">
+        <div class="table-header d-flex justify-content-between align-items-center">
+          <h3 class="mb-0">Payroll Processing</h3>
+
+          <div class="actions d-flex align-items-center gap-3">
+            <!-- 🔍 Search -->
+            <input 
+              type="text" 
+              placeholder="Search employees..." 
+              class="form-control form-control-sm search-box" 
+              [(ngModel)]="searchTerm">
+
+            <!-- 🔽 Filter Dropdown -->
+            <div class="filter-wrapper d-flex align-items-center">
+              <i class="fas fa-filter me-2"></i>
+              <select class="form-select form-select-sm filter-dropdown" [(ngModel)]="statusFilter">
+                <option value="">All Payrolls</option>
+                <option value="Processed">Processed Payrolls</option>
+                <option value="Pending">Pending Payrolls</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <table class="table table-striped table-hover align-middle mt-3">
+          <thead class="table-light">
+            <tr>
+              <th>
+                <input type="checkbox" [(ngModel)]="selectAll" (change)="toggleAll()" />
+              </th>
+              <th>Employee ID</th>
+              <th>Name</th>
+              <th>Designation</th>
+              <th>Net Salary</th> <!-- ✅ Cleaned -->
+              <th>Status</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let emp of filteredEmployees()">
+              <td>
+                <input type="checkbox" [(ngModel)]="emp.selected" (change)="updateSelectAll()" />
+              </td>
+              <td>{{ emp.id }}</td>
+              <td>{{ emp.name }}</td>
+              <td>{{ emp.designation }}</td>
+
+              <!-- ✅ Use helper function instead of inline filter/reduce -->
+              <td>{{ getNetSalary(emp) | currency:'INR' }}</td>
+
+              <td>
+                <span 
+                  [ngClass]="{
+                    'badge bg-success': emp.status === 'Processed',
+                    'badge bg-danger': emp.status === 'Pending'
+                  }">
+                  {{ emp.status }}
+                </span>
+              </td>
+
+              <td class="text-center">
+                <div class="dropdown">
+                  <button 
+                    class="btn btn-sm btn-light dropdown-toggle" 
+                    type="button" 
+                    data-bs-toggle="dropdown" 
+                    aria-expanded="false">
+                    <i class="fas fa-ellipsis-v"></i>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a class="dropdown-item" (click)="generateSlip(emp)">
+                        <i class="fas fa-file-pdf text-danger me-2"></i> Generate Slip
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" (click)="addComponent(emp)">
+                        <i class="fas fa-plus-circle text-primary me-2"></i> Add Component
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+            </tr>
+
+            <tr *ngIf="filteredEmployees().length === 0">
+              <td colspan="7" class="text-center text-muted py-3">
+                <i class="fas fa-info-circle me-2"></i> No records found
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ✅ Add Component Modal -->
+<div class="modal fade" id="addComponentModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Salary Component - {{ selectedEmployee?.name }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label class="form-label">Component Name</label>
+            <input type="text" class="form-control" [(ngModel)]="newComponent.name" name="name" required />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Amount (₹)</label>
+            <input type="number" class="form-control" [(ngModel)]="newComponent.amount" name="amount" required />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Type</label>
+            <select class="form-select" [(ngModel)]="newComponent.type" name="type">
+              <option value="Allowance">Allowance</option>
+              <option value="Deduction">Deduction</option>
+            </select>
+          </div>
+        </form>
+
+        <!-- ✅ Show Existing Components -->
+        <div *ngIf="selectedEmployee?.components?.length">
+          <h6 class="mt-4">Current Components</h6>
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between" *ngFor="let comp of selectedEmployee?.components">
+              <span>
+                <strong>{{ comp.type }}:</strong> {{ comp.name }}
+              </span>
+              <span [ngClass]="{'text-success': comp.type==='Allowance', 'text-danger': comp.type==='Deduction'}">
+                ₹ {{ comp.amount }}
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-primary" (click)="saveComponent()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

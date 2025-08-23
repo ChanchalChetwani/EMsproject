@@ -5,13 +5,11 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { InputField } from '../../shared/input-field/input-field';
-import { Button } from '../../shared/button/button';
 
 @Component({
   selector: 'app-correction-requests',
  standalone: true,
-  imports: [CommonModule, FormsModule, InputField, Button],
+  imports: [CommonModule, FormsModule],
   templateUrl: './correction-requests.html',
   styleUrl: './correction-requests.scss'
 })
