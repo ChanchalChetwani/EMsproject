@@ -1,24 +1,28 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './services/auth.guard';
 import { Error } from './pages/error/error';
-
+import { LogoutComponent } from './pages/logout/logout';
 export const routes: Routes = [
   {
     path: 'login',
-    loadComponent: () => import('./pages/login/login').then(m => m.LoginComponent),
+    loadComponent: () =>
+      import('./pages/login/login').then(m => m.LoginComponent),
   },
   {
     path: 'forgot-password',
-    loadComponent: () => import('./pages/forgot-password/forgot-password').then(m => m.ForgotPassword),
+    loadComponent: () =>
+      import('./pages/forgot-password/forgot-password').then(m => m.ForgotPassword),
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard),
+    loadComponent: () =>
+      import('./pages/dashboard/dashboard').then(m => m.Dashboard),
     canActivate: [AuthGuard]
   },
   {
     path: 'employee',
-    loadComponent: () => import('./pages/employee/employee').then(m => m.EmployeeComponent),
+    loadComponent: () =>
+      import('./pages/employee/employee').then(m => m.EmployeeComponent),
     canActivate: [AuthGuard]
   },
   {
@@ -36,11 +40,24 @@ export const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'reports',
+    path: 'payroll',
     loadComponent: () =>
-      import('./pages/reports/reports').then(m => m.ReportsComponent),  // ✅ NEW ROUTE
+      import('./pages/payroll/payroll').then(m => m.PayrollComponent),
     canActivate: [AuthGuard]
   },
+  {
+    path: 'reports',
+    loadComponent: () =>
+      import('./pages/reports/reports').then(m => m.ReportsComponent),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'settings',
+    loadComponent: () =>
+      import('./pages/settings/settings').then(m => m.SettingsComponent),  // ✅ NEW ROUTE
+    canActivate: [AuthGuard]
+  },
+  { path: 'logout', component: LogoutComponent },
   {
     path: 'error',
     component: Error
@@ -52,6 +69,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'login'
+    redirectTo: 'error'   // ✅ Now error page will show
   }
 ];

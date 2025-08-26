@@ -5,23 +5,44 @@
 
     <div class="reports-container">
       <!-- ✅ Stats -->
-      <div class="stats-cards">
-        <div class="card"><p>Total Employees</p><h2>{{ totalEmployees }}</h2></div>
-        <div class="card"><p>Total Payroll</p><h2>₹ {{ totalPayroll | number }}</h2></div>
-        <div class="card"><p>Performance Score</p><h2>{{ performanceScore }}%</h2></div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h4>Total Employees</h4>
+          <p>{{ totalEmployees }}</p>
+        </div>
+        <div class="stat-card">
+          <h4>Total Payroll</h4>
+          <p>₹ {{ totalPayroll | number }}</p>
+        </div>
+        <div class="stat-card">
+          <h4>Performance Score</h4>
+          <p>{{ performanceScore }}%</p>
+        </div>
       </div>
 
-      <!-- ✅ Chart -->
-      <div class="chart-card">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <h3>Payroll Report</h3>
+      <!-- ✅ Payroll Report -->
+      <div class="chart-section">
+        <div class="chart-header">
+          <h4>Payroll Report</h4>
           <select [(ngModel)]="selectedView" (change)="onViewChange(selectedView)">
             <option value="daily">Daily View</option>
             <option value="monthly">Monthly View</option>
             <option value="yearly">Yearly View</option>
           </select>
         </div>
-        <canvas baseChart [data]="chartConfig.data" [options]="chartConfig.options" [type]="chartConfig.type"></canvas>
+        <div class="chart-wrapper">
+          <canvas baseChart [data]="payrollChart.data" [options]="payrollChart.options" [type]="payrollChart.type"></canvas>
+        </div>
+      </div>
+
+      <!-- ✅ Attendance Report -->
+      <div class="chart-section">
+        <div class="chart-header">
+          <h4>Attendance Report</h4>
+        </div>
+        <div class="chart-wrapper">
+          <canvas baseChart [data]="attendanceChart.data" [options]="attendanceChart.options" [type]="attendanceChart.type"></canvas>
+        </div>
       </div>
     </div>
   </div>

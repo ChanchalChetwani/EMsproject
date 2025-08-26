@@ -1,1 +1,60 @@
-/* You can add global styles to this file, and also import other style files */
+/* Layout */
+
+/* 🌙 Global Dark Mode */
+body.dark-theme {
+  background: #333232;
+  color: #e0e0e0;
+
+  app-sidebar {
+    background: #37475e !important;
+  }
+
+  app-topbar {
+    background: #1f2937 !important;
+    color: #f5f5f5 !important;
+    border-bottom: 1px solid #333 !important;
+  }
+
+  .main-content {
+    background: #121212 !important;
+    color: #e0e0e0 !important;
+  }
+
+  .settings-container {
+    background: #1e1e1e !important;
+    color: #f5f5f5 !important;
+    box-shadow: 0 2px 10px rgba(255,255,255,0.05);
+
+    h2, label, h4 {
+      color: #f5f5f5 !important;
+    }
+
+    p {
+      color: #bbb !important;
+    }
+
+    input {
+      background: #292727 !important;
+      color: #f5f5f5 !important;
+      border: 1px solid #444 !important;
+    }
+
+    .cancel {
+      background: #333 !important;
+      color: #eee !important;
+
+      &:hover {
+        background: #444 !important;
+      }
+    }
+
+    .save {
+      background: #f5f5f5 !important;
+      color: #000 !important;
+
+      &:hover {
+        background: #ddd !important;
+      }
+    }
+  }
+}

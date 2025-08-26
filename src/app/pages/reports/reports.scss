@@ -1,58 +1,71 @@
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+}
+
+/* 🔹 Sidebar */
+app-sidebar {
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: #2f3e56;
+  z-index: 1000;
+}
+
+/* 🔹 Main Content */
+.main-content {
+  margin-left: 250px; // space for sidebar
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #f9f9f9;
+}
+
+/* 🔹 Topbar */
+app-topbar {
+  position: fixed;
+  top: 0;
+  left: 250px;
+  right: 0;
+  height: 60px;
+  background-color: #2f3e56;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 20px;
+  color: white;
+  z-index: 1001;
+  border-bottom: 1px solid #1d2a3a;
+}
+
+/* 🔹 Reports Container */
 .reports-container {
-padding: 1.5rem;
-  overflow-x: auto;
-  width: 90%;        // ✅ takes 90% of screen width
-  max-width: 1600px; // ✅ allow bigger box if screen is wide
-  margin: 100px auto 2rem;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.06);
+  margin-top: 80px; // keep space for topbar
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
 
-  app-sidebar {
-    width: 250px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    background-color: #2f3e56;
-    z-index: 1000;
-  }
-
-  .main-content {
-    margin-left: 250px;
-    width: calc(100% - 250px);
-    display: flex;
-    flex-direction: column;
-
-    app-topbar {
-      position: fixed;
-      top: 0;
-      left: 250px;
-      right: 0;
-      height: 60px;
-      background-color: #2f3e56;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding: 0 20px;
-      color: white;
-      z-index: 1001;
-      border-bottom: 1px solid #1d2a3a;
-    }
-
+/* 🔹 Stats Cards */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: 1.5rem;
 }
 
 .stat-card {
   background: #fff;
   border-radius: 12px;
-  padding: 1rem;
+  padding: 1.5rem;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
   h4 {
     font-size: 1rem;
@@ -61,34 +74,49 @@ padding: 1.5rem;
   }
 
   p {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: bold;
     color: #222;
   }
 }
 
-.charts {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
+/* 🔹 Charts Section */
+.chart-section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
 
-  .chart-card {
+/* Header above chart */
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  h4 {
+    font-size: 1.2rem;
+    color: #333;
+    margin: 0;
+  }
+
+  select {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
     background: #fff;
-    border-radius: 12px;
-    padding: 1rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-
-    h4 {
-      margin-bottom: 1rem;
-      font-size: 1.1rem;
-      color: #444;
-    }
-
-    canvas {
-      width: 100% !important;
-      height: auto !important;
-    }
+    cursor: pointer;
   }
 }
+
+/* Canvas wrapper */
+.chart-wrapper {
+  width: 100%;
+  overflow-x: auto;
+
+  canvas {
+    width: 100% !important;
+    height: 400px !important; // fixed height for better clarity
   }
 }

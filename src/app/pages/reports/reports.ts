@@ -3,53 +3,63 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Sidebar } from '../../shared/sidebar/sidebar';
 import { Topbar } from '../../shared/topbar/topbar';
-import { ReportsService } from '../../services/reports.service';
-import { BaseChartDirective } from 'ng2-charts';
+import { BaseChartDirective } from 'ng2-charts';  // ✅ instead of NgChartsModule
 import { ChartConfiguration } from 'chart.js';
 
 @Component({
   selector: 'app-reports',
   standalone: true,
-  imports: [CommonModule, FormsModule, Sidebar, Topbar, BaseChartDirective],
+  imports: [
+    CommonModule,
+    FormsModule,
+    Sidebar,
+    Topbar,
+    BaseChartDirective   // ✅ use directive instead of module
+  ],
   templateUrl: './reports.html',
   styleUrl: './reports.scss'
 })
 export class ReportsComponent implements OnInit {
-  totalEmployees = 0;
-  totalPayroll = 0;
-  performanceScore = 0;
+  totalEmployees = 1284;  // later from EmployeeService
+  totalPayroll = 842589;  // later from PayrollService
+  performanceScore = 87;  // later from calculations
   selectedView = 'monthly';
 
-  chartLabels: string[] = [];
-  chartConfig: ChartConfiguration<'bar'> = {
+  // ✅ Payroll Chart
+  payrollChart: ChartConfiguration<'bar'> = {
     type: 'bar',
     data: {
-      labels: [],
-      datasets: [{ label: 'Payroll Report', data: [], backgroundColor: '#4CAF50' }]
+      labels: ['Engineering', 'Sales', 'Marketing', 'HR'],
+      datasets: [
+        { label: 'Base Salary', data: [70000, 85000, 30000, 20000], backgroundColor: '#4CAF50' },
+        { label: 'Bonus', data: [80000, 78000, 15000, 25000], backgroundColor: '#3f51b5' },
+        { label: 'Allowances', data: [95000, 60000, 10000, 30000], backgroundColor: '#e91e63' }
+      ]
     },
     options: { responsive: true, plugins: { legend: { position: 'top' } } }
   };
 
-  constructor(private reportsService: ReportsService) {}
+  // ✅ Attendance Chart
+  attendanceChart: ChartConfiguration<'bar'> = {
+    type: 'bar',
+    data: {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+      datasets: [
+        { label: 'Present', data: [80, 75, 60, 90, 85, 70], backgroundColor: '#4CAF50' },
+        { label: 'Absent', data: [20, 25, 40, 10, 15, 30], backgroundColor: '#f44336' },
+        { label: 'Leave', data: [10, 15, 20, 5, 10, 8], backgroundColor: '#FFC107' }
+      ]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'top' } } }
+  };
+chartConfig: any;
 
-  ngOnInit() {
-    this.fetchReports();
-  }
+  constructor() {}
 
-  fetchReports() {
-    this.reportsService.getReports(this.selectedView).subscribe((data: any) => {
-      this.totalEmployees = data.totalEmployees;
-      this.totalPayroll = data.totalPayroll;
-      this.performanceScore = Math.round(data.performanceScore);
-
-      this.chartLabels = data.chartData.map((c: any) => c.label);
-      this.chartConfig.data.labels = this.chartLabels;
-      this.chartConfig.data.datasets[0].data = data.chartData.map((c: any) => c.total);
-    });
-  }
+  ngOnInit() {}
 
   onViewChange(view: string) {
     this.selectedView = view;
-    this.fetchReports();
+    // 🔹 later fetch different data depending on view (daily/monthly/yearly)
   }
 }

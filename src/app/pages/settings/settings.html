@@ -1,0 +1,93 @@
+<div class="dashboard-container">
+  <app-sidebar></app-sidebar>
+  <div class="main-content">
+    <app-topbar></app-topbar>
+
+    <div class="settings-container">
+      <!-- ✅ Feedback Message -->
+      <div 
+        *ngIf="message" 
+        [ngClass]="{ 'error-message': isError, 'success-message': !isError }"
+        class="feedback-message"
+      >
+        {{ message }}
+      </div>
+
+      <!-- ✅ Company Details -->
+      <h2>Company Details</h2>
+      <div class="form-group">
+        <label for="companyName">Company Name</label>
+        <input 
+          id="companyName"
+          type="text" 
+          [(ngModel)]="companyName" 
+          placeholder="Enter company name" 
+        />
+      </div>
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input 
+          id="address"
+          type="text" 
+          [(ngModel)]="address" 
+          placeholder="Enter company address" 
+        />
+      </div>
+
+      <!-- ✅ System Preferences -->
+      <h2>System Preferences</h2>
+
+      <!-- Dark Mode -->
+      <div class="preference">
+        <div>
+          <h4>Dark Mode</h4>
+          <p>Enable dark mode for the application</p>
+        </div>
+        <label class="switch">
+          <input 
+            type="checkbox" 
+            [(ngModel)]="preferences.darkMode"
+            (change)="toggleTheme($event)"   
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <!-- Analytics -->
+      <div class="preference">
+  <div>
+    <h4>Analytics</h4>
+    <p>Share anonymous usage data</p>
+  </div>
+  <label class="switch">
+    <input 
+      type="checkbox" 
+      [(ngModel)]="preferences.analytics" 
+    />
+    <span class="slider"></span>
+  </label>
+</div>
+
+<!-- Automatic Updates -->
+<div class="preference">
+  <div>
+    <h4>Automatic Updates</h4>
+    <p>Keep the application up to date automatically</p>
+  </div>
+  <label class="switch">
+    <input 
+      type="checkbox" 
+      [(ngModel)]="preferences.autoUpdate" 
+    />
+    <span class="slider"></span>
+  </label>
+</div>
+
+      <!-- ✅ Action Buttons -->
+      <div class="action-buttons">
+        <button class="btn cancel" (click)="cancel()">Cancel</button>
+        <button class="btn save" (click)="saveChanges()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
